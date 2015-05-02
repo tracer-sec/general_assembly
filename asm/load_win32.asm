@@ -124,6 +124,6 @@ HashLoop:
     jmp     HashLoop
 HashOut:
     mov     esp, ebp
-	pop     ebp
+    pop     ebp
     ret     0x8                 ; return and unwind the stack
     
