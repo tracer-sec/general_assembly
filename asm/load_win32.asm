@@ -56,7 +56,7 @@ GetFunctionOut:
     mov     eax, [ecx + ebx]    ; dump our function RVA into eax
     add     eax, [ebp - 4]      ; and turn the address into an absolute
     pop     ebx                 ; unwind
-    add     esp, 4
+    mov     esp, ebp
     pop     ebp
     ret     0x8
 
@@ -72,7 +72,7 @@ GetModule:
 GetModuleLoop:
     mov     esi, [ebx + 0x30]   ; base DLL name
     push    0x2
-    push    dword [ebp + 0x8]   ; the hash of our first argument
+    push    dword [ebp + 0x8]   ; arg0, our hash
     push    esi
     call    CheckHash           ; run our hash check
     test    eax, eax            ; did we match?
@@ -83,6 +83,7 @@ GetModuleLoop:
 GetModuleOut:
     mov     eax, [ebx + 0x18]   ; there's our module base address
     pop     ebx                 ; restore ebx
+    mov     esp, ebp
     pop     ebp
     ret     0x4
     
@@ -102,6 +103,7 @@ CheckHash:
     jne     CheckHashOut
     inc     eax                 ; set eax to 1 if the hashes match
 CheckHashOut:
+    mov     esp, ebp
     pop     ebp
     ret     0xc
     
